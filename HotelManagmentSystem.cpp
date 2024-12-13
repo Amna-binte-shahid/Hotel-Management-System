@@ -24,31 +24,43 @@ public:
 
 	void addRoom(int no, int p,string n) {
 		Room* newRoom = new Room(no,p,n);
-		if (head == nullptr) {
 			newRoom->next = head;
 			head = newRoom;
-		}
-		else {
-			Room* temp = head;
-			while (temp->next != nullptr) {
-				temp = temp->next;
-			}
-			temp->next = newRoom;
-		}
+			write();
 		cout << "Room Is Added in the Hotel." << endl;
+		return;
 	}
 
-	void addGuest(int no, string n) {
+	void addguest(int no, string n) {
 		Room* temp = head;
 		while (temp != nullptr) {
 			if (temp->roomNo == no) {
 				temp->Name = n;
-				cout << "Guest Is Added in the room." << endl;
+				cout << "Guest is added." << endl;
+				write();
 				return;
 			}
 			temp = temp->next;
 		}
-		cout << "Room Number You Entered Is Not Found." << endl;
+		cout << "Room no you entered is not found." << endl;
+	}
+
+	void check(int no, string n) {
+		Room* temp = head;
+		while (temp != nullptr) {
+			if (temp->roomNo == no) {
+				if (temp->Name == "") {
+					temp->Name = n;
+					cout << "Guest Is Added in the room." << endl;
+					write();
+					return;
+				}
+				else {
+					cout << "The room is occupied." << endl;
+				}
+			}
+			temp = temp->next;
+		}
 	}
 
 	void deleteRoom(int no) {
@@ -69,6 +81,7 @@ public:
 			prev->next = curr->next;
 		}
 		delete curr;
+		write();
 		cout << "The room number you entered is deleted from the hotel." << endl;
 	}
 
@@ -78,11 +91,11 @@ public:
 			if (temp1->roomNo == no) {
 				if (temp1->Name == n) {
 					temp1->Name = " ";
-					cout << "the Guest name you entered is removed." << endl;
+					cout << "the name you entered is removed." << endl;
 					return;
 				}
 				else {
-					cout << "Guest Name Does Not Match." << endl;
+					cout << "Name Does Not Match." << endl;
 					return;
 				}
 			}
@@ -143,7 +156,7 @@ public:
 			file << "Room Price is:" << endl;
 			file << temp5->roomPrice << endl;
 			file << "Guest Name: " << endl;
-			file << temp5->Name << endl;;
+			file << temp5->Name << endl;
 			temp5 = temp5->next;
 		}
 		file.close();
@@ -160,12 +173,8 @@ public:
 		int roomPrice;
 		string Name;
 		while (file >> roomNo >> roomPrice >> ws && getline(file,Name)){
-			cout << "Room No:" << endl;
-			cout << roomNo<<endl;
-			cout << "Room Price: " << endl;
-			cout << roomPrice<<endl;
-			cout << "Guest Name: " << endl;
-			cout << Name<<endl;
+			addRoom(roomNo,roomPrice,Name);
+			check(roomNo, Name);
 		}
 		file.close();
 	}
@@ -178,16 +187,16 @@ int main() {
 	string Name;
 	int choice;
 	do {
-		cout << "Amna's Hotel System: " << endl;
+		cout << "Hotel System: " << endl;
 		cout << "Enter Your choice from 1 to 9: " << endl;
 		cout << "1. Add Room. " << endl;
 		cout << "2. Add Guest. " << endl;
-		cout << "3. Delete Room. " << endl;
-		cout << "4. Delete Guest. " << endl;
-		cout << "5. Count Rooms. " << endl;
-		cout << "6. Search Room. " << endl;
-		cout << "7. Display Rooms. " << endl;
-		cout << "8. Write In File. " << endl;
+		cout << "3. Check Room. " << endl;
+		cout << "4. Delete Room. " << endl;
+		cout << "5. Delete Guest. " << endl;
+		cout << "6. Count Rooms. " << endl;
+		cout << "7. Search Room. " << endl;
+		cout << "8. Display Rooms. " << endl;
 		cout << "9. End The Program. " << endl;
 		cin >> choice;
 		switch (choice) {
@@ -203,34 +212,37 @@ int main() {
 			cin >> roomNo;
 			cout << "Enter Guest Name To Add: " << endl;
 			cin >> Name;
-			obj.addGuest(roomNo, Name);
+			obj.addguest(roomNo, Name);
 			break;
 		case 3:
+			cout << "Enter Room Number: " << endl;
+			cin >> roomNo;
+			cout << "Enter Guest Name To Add: " << endl;
+			cin >> Name;
+			obj.check(roomNo, Name);
+			break;
+		case 4:
 			cout << "Enter Room Number To Delete: " << endl;
 			cin >> roomNo;
 			obj.deleteRoom(roomNo);
 			break;
-		case 4:
+		case 5:
 			cout << "Enter Room Number: " << endl;
 			cin >> roomNo;
 			cout << "Enter Guest Name To Delete: " << endl;
 			cin >> Name;
 			obj.deleteguest(roomNo, Name);
 			break;
-		case 5:
+		case 6:
 			obj.count();
 			break;
-		case 6:
+		case 7:
 			cout << "Enter Room Number To Search: " << endl;
 			cin >> roomNo;
 			obj.search(roomNo);
 			break;
-		case 7:
-			obj.display();
-			break;
 		case 8:
-			obj.write();
-			cout << "The details are saved in the file." << endl;
+			obj.display();
 			break;
 		case 9:
 			cout << "The Program is ended." << endl;
